@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --semantic-muted: rgba(10, 10, 10, 0.55);
+  --semantic-body: rgba(10, 10, 10, 0.7);
+  --semantic-border-subtle: rgba(10, 10, 10, 0.1);
+  --semantic-border-hairline: rgba(10, 10, 10, 0.08);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+  html:focus-within {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  @apply text-obsidian-950 antialiased;
+  position: relative;
+  isolation: isolate;
+  background-color: #fafafa;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 120% 70% at 50% -18%, rgba(251, 113, 133, 0.045), transparent 52%),
+    radial-gradient(ellipse 95% 55% at 100% 65%, rgba(245, 158, 11, 0.035), transparent 48%),
+    radial-gradient(ellipse 80% 50% at 0% 85%, rgba(163, 163, 163, 0.06), transparent 50%),
+    linear-gradient(180deg, #ffffff 0%, #fafafa 38%, #f4f4f5 100%);
+  will-change: opacity;
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body::before {
+    animation: bgMeshBreath 22s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  }
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E"),
+    radial-gradient(rgba(10, 10, 10, 0.045) 1px, transparent 1px);
+  background-size:
+    200px 200px,
+    28px 28px;
+}
+
+@keyframes bgMeshBreath {
+  0% {
+    opacity: 0.88;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+::selection {
+  background: rgba(251, 113, 133, 0.22);
+}
+
+.container-app {
+  @apply mx-auto w-full max-w-6xl px-5;
+}
+
+.container-fluid {
+  @apply mx-auto w-full max-w-none px-5 sm:px-8 lg:px-12 xl:px-16;
+}
+
+.skip-to-content {
+  @apply sr-only;
+}
+
+.skip-to-content:focus {
+  @apply not-sr-only fixed left-4 top-4 z-[100] rounded-full bg-pearl-50 px-4 py-2.5 text-sm font-semibold text-obsidian-950 shadow-lift outline-none ring-2 ring-accent-500/40 ring-offset-2 ring-offset-pearl-50;
+}
+
+.surface {
+  @apply bg-white/80 border backdrop-blur-md;
+  border-color: var(--semantic-border-hairline);
+  transition:
+    box-shadow 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.72),
+    0 8px 32px rgba(10, 10, 10, 0.04),
+    0 24px 64px rgba(10, 10, 10, 0.05);
+}
+
+.hairline {
+  box-shadow: inset 0 0 0 1px rgba(10, 10, 10, 0.1);
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold;
+  @apply bg-obsidian-950 text-pearl-50;
+  @apply border border-obsidian-950/10;
+  @apply transition-[transform,box-shadow,background-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)];
+  @apply hover:bg-obsidian-900 hover:shadow-lift active:scale-[0.98] active:shadow-hairline;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45), 0 18px 70px rgba(10, 10, 10, 0.14);
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center rounded-full px-5 py-3 font-semibold;
+  @apply border border-obsidian-950/[0.12] bg-white/55 backdrop-blur-sm transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)];
+  @apply hover:bg-white/85 hover:border-obsidian-950/[0.16] active:scale-[0.98];
+}
+
+.btn-link {
+  @apply inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold;
+  @apply text-obsidian-950/70 transition-colors duration-500 ease-[cubic-bezier(0.22,1,0.36,1)];
+  @apply hover:text-obsidian-950 hover:bg-obsidian-950/[0.06] active:bg-obsidian-950/[0.1];
+  @apply outline-none focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-pearl-50;
+}
+
+.input-field {
+  @apply w-full rounded-2xl border bg-white/70 px-4 py-3 text-obsidian-950 placeholder:text-obsidian-950/35 outline-none transition-[border-color,box-shadow] duration-300;
+  border-color: var(--semantic-border-subtle);
+  @apply focus:border-accent-500/45 focus:ring-2 focus:ring-accent-500/20;
+}
+
+.input-field[aria-invalid='true'] {
+  @apply border-red-600/40 ring-2 ring-red-500/20;
+}
