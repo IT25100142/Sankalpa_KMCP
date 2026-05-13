@@ -4,6 +4,13 @@ function cx(...parts) {
 
 export default function Eyebrow({ as: As = 'div', className = '', children }) {
   return (
-    <As className={cx('text-xs tracking-[0.24em] uppercase text-semantic-muted', className)}>{children}</As>
+    <As
+      className={cx(
+        'text-[11px] sm:text-xs font-medium tracking-[0.22em] uppercase text-semantic-muted',
+        className,
+      )}
+    >
+      {children}
+    </As>
   )
 }

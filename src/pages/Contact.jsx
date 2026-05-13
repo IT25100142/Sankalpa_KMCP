@@ -91,7 +91,7 @@ export default function Contact() {
                   id={`${formId}-form-status`}
                   tabIndex={-1}
                   role="status"
-                  className="mb-4 rounded-2xl border border-accent-500/25 bg-accent-500/10 px-4 py-3 text-sm text-obsidian-950/85 outline-none focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="mb-4 rounded-2xl border border-accent-500/25 bg-accent-500/10 px-4 py-3 text-sm text-obsidian-950/85 outline-none focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-linen-50"
                   initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.38, ease: easeSmooth }}

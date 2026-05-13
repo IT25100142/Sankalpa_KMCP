@@ -1,10 +1,10 @@
-import { NavLink, useLocation } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
+import { NavLink, useLocation, useMatch } from 'react-router-dom'
+import { LayoutGroup, motion, useReducedMotion } from 'framer-motion'
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import Container from './ui/Container'
 import { profile } from '../data/profile'
 import { Button } from './ui/Button'
-import { easeSmooth, transition as motionTransition } from '../motion/presets'
+import { easeOutExpo, easeSmooth, transition as motionTransition } from '../motion/presets'
 
 const links = [
   { to: '/', label: 'Home' },
@@ -17,12 +17,56 @@ function cx(...parts) {
   return parts.filter(Boolean).join(' ')
 }
 
-const navLinkClass = ({ isActive }) =>
-  cx(
-    'relative rounded-full px-3 sm:px-4 py-2 text-sm font-semibold transition-[color,background-color,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] outline-none focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-pearl-50',
-    'text-obsidian-950/70 hover:text-obsidian-950',
-    isActive ? 'text-obsidian-950 bg-obsidian-950/[0.06] border border-obsidian-950/15' : 'border border-transparent',
+function NavItem({ to, label, reduce, onActivate }) {
+  const match = useMatch(to === '/' ? { path: to, end: true } : { path: to })
+  const isActive = Boolean(match)
+  const [hovered, setHovered] = useState(false)
+  const showPill = hovered || isActive
+
+  return (
+    <NavLink
+      to={to}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      onClick={onActivate}
+      className={cx(
+        'relative inline-flex items-center rounded-full px-3 sm:px-4 py-2 text-sm font-semibold outline-none',
+        'transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
+        isActive ? 'text-obsidian-950' : 'text-obsidian-950/70 hover:text-obsidian-950',
+        'focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-linen-50',
+      )}
+    >
+      {showPill && !reduce ? (
+        <motion.span
+          layoutId="navPill"
+          aria-hidden
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: isActive
+              ? 'rgba(18,14,10,0.07)'
+              : 'rgba(18,14,10,0.045)',
+            boxShadow: isActive
+              ? 'inset 0 0 0 1px rgba(18,14,10,0.14), inset 0 1px 0 rgba(255,255,255,0.7)'
+              : 'inset 0 0 0 1px rgba(18,14,10,0.07), inset 0 1px 0 rgba(255,255,255,0.55)',
+          }}
+          transition={{ type: 'spring', stiffness: 380, damping: 32, mass: 0.6 }}
+        />
+      ) : null}
+
+      <span className="relative z-[1]">{label}</span>
+
+      <motion.span
+        aria-hidden
+        className="pointer-events-none absolute left-3 right-3 sm:left-4 sm:right-4 bottom-1 h-px origin-left bg-obsidian-950/60"
+        initial={false}
+        animate={{ scaleX: showPill ? 1 : 0, opacity: showPill ? 0.45 : 0 }}
+        transition={{ duration: 0.45, ease: easeOutExpo }}
+      />
+    </NavLink>
   )
+}
 
 export default function Navbar() {
   const showGithub = Boolean(profile.socials.github?.trim())
@@ -126,13 +170,13 @@ export default function Navbar() {
       className="sticky top-0 z-50"
       style={{
         transform: `translateY(${translateY}px)`,
-        transition: reduce ? 'none' : `transform 520ms cubic-bezier(${easeSmooth.join(',')})`,
+        transition: reduce ? 'none' : `transform 620ms cubic-bezier(${easeSmooth.join(',')})`,
       }}
     >
       {menuOpen ? (
         <div
           role="presentation"
-          className="fixed inset-0 z-40 bg-obsidian-950/25 backdrop-blur-[2px] md:hidden"
+          className="fixed inset-0 z-40 bg-obsidian-950/30 backdrop-blur-[3px] md:hidden"
           onClick={closeMobileMenu}
           aria-hidden
         />
@@ -140,14 +184,29 @@ export default function Navbar() {
       <div
         ref={shellRef}
         className={cx(
-          'relative z-50 border-b',
+          'relative z-50 border-b transition-[background-color,backdrop-filter,box-shadow,border-color] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
           solid || menuOpen
-            ? 'border-obsidian-950/10 bg-white/80 backdrop-blur-md'
-            : 'border-transparent',
+            ? 'border-obsidian-950/[0.06] bg-white/[0.62] shadow-glassDeep backdrop-blur-xl supports-[backdrop-filter]:bg-white/55'
+            : 'border-transparent shadow-none',
         )}
       >
+        {/* Bottom gradient hairline that fades in on scroll */}
+        <span
+          aria-hidden
+          className={cx(
+            'pointer-events-none absolute inset-x-0 bottom-0 h-px transition-opacity duration-700',
+            solid ? 'opacity-100' : 'opacity-0',
+          )}
+          style={{
+            background:
+              'linear-gradient(90deg, transparent 0%, rgba(18,14,10,0.16) 50%, transparent 100%)',
+          }}
+        />
         <Container className="py-4 flex items-center justify-between gap-4">
-          <NavLink to="/" className="group flex min-w-0 max-w-[min(100%,18rem)] sm:max-w-none items-center gap-2 sm:gap-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-pearl-50">
+          <NavLink
+            to="/"
+            className="group flex min-w-0 max-w-[min(100%,18rem)] sm:max-w-none items-center gap-2 sm:gap-3 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-linen-50"
+          >
             <span className="relative inline-flex h-9 min-w-9 shrink-0 items-center justify-center rounded-xl surface hairline px-1">
               <span className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/10 to-transparent" />
               <span className="relative text-xs font-semibold tracking-tight text-obsidian-950">SK</span>
@@ -158,13 +217,13 @@ export default function Navbar() {
           </NavLink>
 
           <div className="flex items-center gap-2">
-            <nav className="hidden md:flex items-center gap-1 sm:gap-2" aria-label="Primary">
-              {links.map((l) => (
-                <NavLink key={l.to} to={l.to} className={navLinkClass}>
-                  {l.label}
-                </NavLink>
-              ))}
-            </nav>
+            <LayoutGroup id="primary-nav">
+              <nav className="hidden md:flex items-center gap-1 sm:gap-2" aria-label="Primary">
+                {links.map((l) => (
+                  <NavItem key={l.to} to={l.to} label={l.label} reduce={reduce} />
+                ))}
+              </nav>
+            </LayoutGroup>
             {showGithub ? (
               <>
                 <div className="hidden md:block h-8 w-px bg-obsidian-950/15" />
@@ -184,7 +243,7 @@ export default function Navbar() {
               ref={menuButtonRef}
               type="button"
               className={cx(
-                'md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-obsidian-950/15 bg-white text-obsidian-950 outline-none transition-colors hover:bg-obsidian-950/[0.04] focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-pearl-50',
+                'md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border border-obsidian-950/15 bg-white text-obsidian-950 outline-none transition-colors hover:bg-obsidian-950/[0.04] focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-linen-50',
                 menuOpen && 'bg-obsidian-950/[0.06] border-obsidian-950/20',
               )}
               aria-expanded={menuOpen}
@@ -231,17 +290,18 @@ export default function Navbar() {
         >
           <Container className="pb-4 pt-2">
             <nav className="flex flex-col gap-1" aria-label="Mobile primary">
-              {links.map((l, i) => (
-                <NavLink
-                  key={l.to}
-                  ref={i === 0 ? firstLinkRef : undefined}
-                  to={l.to}
-                  className={navLinkClass}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {l.label}
-                </NavLink>
-              ))}
+              <LayoutGroup id="mobile-nav">
+                {links.map((l, i) => (
+                  <span key={l.to} ref={i === 0 ? firstLinkRef : undefined} className="block">
+                    <NavItem
+                      to={l.to}
+                      label={l.label}
+                      reduce={reduce}
+                      onActivate={() => setMenuOpen(false)}
+                    />
+                  </span>
+                ))}
+              </LayoutGroup>
               {showGithub ? (
                 <Button
                   href={profile.socials.github}

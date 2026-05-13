@@ -14,7 +14,7 @@ export default function Footer() {
   const socials = activeSocialEntries()
 
   return (
-    <footer className="relative z-10 mt-20 border-t border-obsidian-950/10">
+    <footer className="relative z-10 mt-20 border-t border-obsidian-950/[0.085]">
       <Container className="py-10">
         <Card className="p-6 sm:p-8 flex flex-col gap-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -48,7 +48,7 @@ export default function Footer() {
                   to={l.to}
                   className={({ isActive }) =>
                     [
-                      'rounded-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                      'rounded-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-linen-50',
                       isActive ? 'text-obsidian-950' : 'text-obsidian-950/55 hover:text-obsidian-950/80',
                     ].join(' ')
                   }

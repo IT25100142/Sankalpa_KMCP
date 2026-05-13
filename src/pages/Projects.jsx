@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import PageTransition from '../components/PageTransition'
 import { profile } from '../data/profile'
 import Container from '../components/ui/Container'
@@ -7,11 +9,24 @@ import ProjectCard from '../components/ProjectCard'
 
 export default function Projects() {
   const showGithub = Boolean(profile.socials.github?.trim())
+  const reduce = useReducedMotion()
+  const pageRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: pageRef,
+    offset: ['start end', 'end start'],
+  })
+  const headingYRaw = useTransform(scrollYProgress, [0, 1], [-20, 20])
+  const gridYRaw = useTransform(scrollYProgress, [0, 1], [10, -10])
+  const headingY = reduce ? 0 : headingYRaw
+  const gridY = reduce ? 0 : gridYRaw
 
   return (
     <PageTransition>
-      <Container className="pt-12 sm:pt-16">
-        <div className="flex items-end justify-between gap-6 flex-wrap">
+      <Container ref={pageRef} className="pt-12 sm:pt-16">
+        <motion.div
+          className="flex items-end justify-between gap-6 flex-wrap"
+          style={{ y: headingY }}
+        >
           <SectionHeading
             eyebrow="Projects"
             title="Selected work"
@@ -22,15 +37,17 @@ export default function Projects() {
               GitHub
             </Button>
           ) : null}
-        </div>
+        </motion.div>
 
-        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <motion.div
+          className="mt-10 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
+          style={{ y: gridY }}
+        >
           {profile.projects.map((p, index) => (
             <ProjectCard key={p.slug} project={p} index={index} />
           ))}
-        </div>
+        </motion.div>
       </Container>
     </PageTransition>
   )
 }
-
