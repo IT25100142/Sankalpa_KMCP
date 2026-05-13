@@ -1,4 +1,5 @@
 import { useId, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import PageTransition from '../components/PageTransition'
 import { profile, activeSocialEntries } from '../data/profile'
 import Container from '../components/ui/Container'
@@ -6,6 +7,9 @@ import Card from '../components/ui/Card'
 import SectionHeading from '../components/ui/SectionHeading'
 import { Button } from '../components/ui/Button'
 import Eyebrow from '../components/ui/Eyebrow'
+import { easeSmooth } from '../motion/presets'
+
+const SUBMIT_MS = 520
 
 const initialForm = { name: '', email: '', message: '' }
 
@@ -22,10 +26,12 @@ function validate(form) {
 }
 
 export default function Contact() {
+  const reduce = useReducedMotion()
   const socialLinks = activeSocialEntries()
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState({})
   const [submitted, setSubmitted] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const statusRef = useRef(null)
   const formId = useId()
   const hintName = `${formId}-hint-name`
@@ -41,18 +47,24 @@ export default function Contact() {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    if (isSubmitting) return
     const nextErrors = validate(form)
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) {
       setSubmitted(false)
       return
     }
-    setForm(initialForm)
-    setErrors({})
-    setSubmitted(true)
-    requestAnimationFrame(() => {
-      statusRef.current?.focus()
-    })
+    setIsSubmitting(true)
+    setSubmitted(false)
+    window.setTimeout(() => {
+      setForm(initialForm)
+      setErrors({})
+      setSubmitted(true)
+      setIsSubmitting(false)
+      requestAnimationFrame(() => {
+        statusRef.current?.focus()
+      })
+    }, SUBMIT_MS)
   }
 
   return (
@@ -74,15 +86,18 @@ export default function Contact() {
           <Card className="lg:col-span-7 p-6 sm:p-10">
             <div aria-live="polite" className="min-h-[1.25rem]">
               {submitted ? (
-                <div
+                <motion.div
                   ref={statusRef}
                   id={`${formId}-form-status`}
                   tabIndex={-1}
                   role="status"
                   className="mb-4 rounded-2xl border border-accent-500/25 bg-accent-500/10 px-4 py-3 text-sm text-obsidian-950/85 outline-none focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  initial={reduce ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.38, ease: easeSmooth }}
                 >
                   Message recorded (demo only). In production this would send securely—use email below for now.
-                </div>
+                </motion.div>
               ) : null}
             </div>
 
@@ -159,8 +174,8 @@ export default function Contact() {
               </label>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <Button type="submit" className="w-full sm:w-auto">
-                  Send message
+                <Button type="submit" className="w-full sm:w-auto" disabled={isSubmitting} ariaBusy={isSubmitting}>
+                  {isSubmitting ? 'Sending…' : 'Send message'}
                 </Button>
                 <Button href={`mailto:${profile.email}`} variant="ghost" className="w-full sm:w-auto">
                   Email instead

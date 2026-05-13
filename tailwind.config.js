@@ -5,7 +5,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial'],
-        serif: ['ui-serif', 'Georgia', 'Times New Roman', 'Times'],
+        serif: ['Newsreader', 'ui-serif', 'Georgia', 'Times New Roman', 'Times'],
       },
       colors: {
         obsidian: {

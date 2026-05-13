@@ -11,6 +11,8 @@ export const profile = {
   projects: [
     {
       slug: 'nocturne-dashboard',
+      coverSrc: '',
+      coverAlt: '',
       year: '2026',
       title: 'Neon Dashboard',
       description: 'A sleek analytics UI with motion and realtime charts.',
@@ -22,8 +24,16 @@ export const profile = {
       demoUrl: '',
       githubUrl: '',
       gallery: [
-        { alt: 'Overview dashboard', caption: 'Placeholder — replace with a real screenshot and metric callouts.' },
-        { alt: 'Detail view and filters', caption: 'Placeholder — show interaction states and density handling.' },
+        {
+          alt: 'Overview dashboard',
+          caption: 'Placeholder — replace with a real screenshot and metric callouts.',
+          src: '',
+        },
+        {
+          alt: 'Detail view and filters',
+          caption: 'Placeholder — show interaction states and density handling.',
+          src: '',
+        },
       ],
       caseStudy: {
         problem: 'Placeholder — the product needed a dashboard that stayed readable at high information density.',
@@ -33,6 +43,8 @@ export const profile = {
     },
     {
       slug: 'atelier-showcase',
+      coverSrc: '',
+      coverAlt: '',
       year: '2025',
       title: '3D Product Showcase',
       description: 'Interactive 3D viewer with lighting presets and hotspots.',
@@ -44,8 +56,8 @@ export const profile = {
       demoUrl: '',
       githubUrl: '',
       gallery: [
-        { alt: 'Hero section', caption: 'Placeholder — show the first impression and typography.' },
-        { alt: 'Feature hotspots', caption: 'Placeholder — show interaction details and microcopy.' },
+        { alt: 'Hero section', caption: 'Placeholder — show the first impression and typography.', src: '' },
+        { alt: 'Feature hotspots', caption: 'Placeholder — show interaction details and microcopy.', src: '' },
       ],
       caseStudy: {
         problem: 'Placeholder — the experience needed to feel premium without overwhelming the product.',
@@ -55,6 +67,8 @@ export const profile = {
     },
     {
       slug: 'writing-studio',
+      coverSrc: '',
+      coverAlt: '',
       year: '2025',
       title: 'AI Writing Studio',
       description: 'A writing tool with prompt workflows and export formats.',
@@ -66,8 +80,8 @@ export const profile = {
       demoUrl: '',
       githubUrl: '',
       gallery: [
-        { alt: 'Editor layout', caption: 'Placeholder — show focus states and hierarchy.' },
-        { alt: 'Templates and export', caption: 'Placeholder — show workflow UX and system feedback.' },
+        { alt: 'Editor layout', caption: 'Placeholder — show focus states and hierarchy.', src: '' },
+        { alt: 'Templates and export', caption: 'Placeholder — show workflow UX and system feedback.', src: '' },
       ],
       caseStudy: {
         problem: 'Placeholder — users needed a workflow that reduced cognitive load across drafts and exports.',
@@ -77,6 +91,8 @@ export const profile = {
     },
     {
       slug: 'lux-portfolio',
+      coverSrc: '',
+      coverAlt: '',
       year: '2026',
       title: 'Portfolio Template',
       description: 'A premium starter with routes, motion, and 3D scenes.',
@@ -88,8 +104,8 @@ export const profile = {
       demoUrl: '',
       githubUrl: '',
       gallery: [
-        { alt: 'Homepage hero', caption: 'Placeholder — show layout rhythm and headline style.' },
-        { alt: 'Project detail', caption: 'Placeholder — show case study structure.' },
+        { alt: 'Homepage hero', caption: 'Placeholder — show layout rhythm and headline style.', src: '' },
+        { alt: 'Project detail', caption: 'Placeholder — show case study structure.', src: '' },
       ],
       caseStudy: {
         problem: 'Placeholder — templates often look generic and “AI generated” due to repeated patterns.',
@@ -99,6 +115,8 @@ export const profile = {
     },
     {
       slug: 'tiny-game',
+      coverSrc: '',
+      coverAlt: '',
       year: '2024',
       title: 'Tiny Game',
       description: 'A minimal arcade game with juicy micro-interactions.',
@@ -110,8 +128,8 @@ export const profile = {
       demoUrl: '',
       githubUrl: '',
       gallery: [
-        { alt: 'Gameplay', caption: 'Placeholder — show the game and how inputs feel.' },
-        { alt: 'Menus and states', caption: 'Placeholder — show the UI around the experience.' },
+        { alt: 'Gameplay', caption: 'Placeholder — show the game and how inputs feel.', src: '' },
+        { alt: 'Menus and states', caption: 'Placeholder — show the UI around the experience.', src: '' },
       ],
       caseStudy: {
         problem: 'Placeholder — the challenge was to make a small game feel “finished” with minimal scope.',

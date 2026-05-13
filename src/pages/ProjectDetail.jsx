@@ -30,6 +30,9 @@ export default function ProjectDetail() {
   const project = useMemo(() => profile.projects.find((p) => p.slug === slug), [slug])
   if (!project) return <NotFound />
 
+  const coverSrc = String(project.coverSrc || '').trim()
+  const coverAlt = String(project.coverAlt || project.title || '').trim() || project.title
+
   const meta = [
     { label: 'Year', value: project.year },
     { label: 'Role', value: project.role },
@@ -56,6 +59,21 @@ export default function ProjectDetail() {
             ) : null}
           </div>
         </div>
+
+        {coverSrc ? (
+          <div className="mt-10 overflow-hidden rounded-3xl border border-semantic-borderHairline bg-white/60 shadow-sm">
+            <div className="aspect-[21/9] min-h-[160px] w-full sm:aspect-[2.4/1]">
+              <img
+                src={coverSrc}
+                alt={coverAlt}
+                loading="eager"
+                decoding="async"
+                sizes="100vw"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        ) : null}
 
         <div className="mt-10 grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
           <div className="lg:col-span-7 text-obsidian-950">
@@ -118,17 +136,33 @@ export default function ProjectDetail() {
         </div>
 
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5 pb-2">
-          {(project.gallery || []).map((g) => (
-            <Card key={g.alt} className="p-0 overflow-hidden">
-              <div className="aspect-[16/10] bg-gradient-to-br from-obsidian-950/[0.04] to-transparent grid place-items-center text-neutral-500">
-                <Eyebrow className="text-neutral-500">Image placeholder</Eyebrow>
-              </div>
-              <div className="p-6">
-                <div className="text-sm font-semibold text-obsidian-950">{g.alt}</div>
-                {g.caption ? <div className="mt-2 text-sm text-obsidian-950/65">{g.caption}</div> : null}
-              </div>
-            </Card>
-          ))}
+          {(project.gallery || []).map((g) => {
+            const gallerySrc = String(g.src || '').trim()
+            return (
+              <Card key={g.alt} className="p-0 overflow-hidden">
+                <div className="relative aspect-[16/10] overflow-hidden bg-gradient-to-br from-obsidian-950/[0.04] to-transparent">
+                  {gallerySrc ? (
+                    <img
+                      src={gallerySrc}
+                      alt={g.alt}
+                      loading="lazy"
+                      decoding="async"
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="grid h-full min-h-[10rem] w-full place-items-center text-neutral-500">
+                      <Eyebrow className="text-neutral-500">Image placeholder</Eyebrow>
+                    </div>
+                  )}
+                </div>
+                <div className="p-6">
+                  <div className="text-sm font-semibold text-obsidian-950">{g.alt}</div>
+                  {g.caption ? <div className="mt-2 text-sm text-obsidian-950/65">{g.caption}</div> : null}
+                </div>
+              </Card>
+            )
+          })}
         </div>
       </Container>
     </PageTransition>

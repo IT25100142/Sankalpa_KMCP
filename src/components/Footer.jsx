@@ -1,6 +1,14 @@
+import { NavLink } from 'react-router-dom'
 import { profile, activeSocialEntries } from '../data/profile'
 import Container from './ui/Container'
 import Card from './ui/Card'
+
+const footerLinks = [
+  { to: '/', label: 'Home' },
+  { to: '/about', label: 'About' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/contact', label: 'Contact' },
+]
 
 export default function Footer() {
   const socials = activeSocialEntries()
@@ -33,7 +41,23 @@ export default function Footer() {
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-obsidian-950/55">
             <div>© {new Date().getFullYear()} {profile.name}. All rights reserved.</div>
-            <div className="text-obsidian-950/45">Vite • React • Tailwind • Motion</div>
+            <nav aria-label="Footer" className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              {footerLinks.map((l) => (
+                <NavLink
+                  key={l.to}
+                  to={l.to}
+                  className={({ isActive }) =>
+                    [
+                      'rounded-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent-500/35 focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+                      isActive ? 'text-obsidian-950' : 'text-obsidian-950/55 hover:text-obsidian-950/80',
+                    ].join(' ')
+                  }
+                >
+                  {l.label}
+                </NavLink>
+              ))}
+            </nav>
+            <div className="text-obsidian-950/45 sm:text-right">Vite • React • Tailwind • Motion</div>
           </div>
         </Card>
       </Container>

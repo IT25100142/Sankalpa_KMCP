@@ -1,9 +1,11 @@
 import PageTransition from '../components/PageTransition'
+import { motion, useReducedMotion } from 'framer-motion'
 import { profile } from '../data/profile'
 import Container from '../components/ui/Container'
 import Card from '../components/ui/Card'
 import SectionHeading from '../components/ui/SectionHeading'
 import Eyebrow from '../components/ui/Eyebrow'
+import { easeSmooth } from '../motion/presets'
 
 const skills = [
   { name: 'React + UI engineering', level: 92 },
@@ -13,6 +15,7 @@ const skills = [
 ]
 
 export default function About() {
+  const reduce = useReducedMotion()
   return (
     <PageTransition>
       <Container className="pt-12 sm:pt-16">
@@ -79,10 +82,20 @@ export default function About() {
                     <span className="text-obsidian-950/45">{s.level}%</span>
                   </div>
                   <div className="mt-2 h-2 rounded-full bg-obsidian-950/[0.08] overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-accent-600 to-pearl-50/70"
-                      style={{ width: `${s.level}%` }}
-                    />
+                    {reduce ? (
+                      <div
+                        className="h-full rounded-full bg-gradient-to-r from-accent-600 to-pearl-50/70"
+                        style={{ width: `${s.level}%` }}
+                      />
+                    ) : (
+                      <motion.div
+                        className="h-full rounded-full bg-gradient-to-r from-accent-600 to-pearl-50/70"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${s.level}%` }}
+                        viewport={{ once: true, amount: 0.5 }}
+                        transition={{ duration: 1.05, ease: easeSmooth }}
+                      />
+                    )}
                   </div>
                 </div>
               ))}

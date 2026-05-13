@@ -14,6 +14,8 @@ export function Button({
   rel,
   type,
   onClick,
+  disabled,
+  ariaBusy,
   children,
 }) {
   const base =
@@ -50,7 +52,13 @@ export function Button({
   }
 
   return (
-    <button type={type || 'button'} onClick={onClick} className={cls}>
+    <button
+      type={type || 'button'}
+      onClick={onClick}
+      className={cls}
+      disabled={disabled}
+      aria-busy={ariaBusy ? true : undefined}
+    >
       {children}
     </button>
   )

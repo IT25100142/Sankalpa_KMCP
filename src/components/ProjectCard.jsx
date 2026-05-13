@@ -19,6 +19,9 @@ export default function ProjectCard({ project, index = 0 }) {
   const reduce = useReducedMotion()
   const delay = useMemo(() => 0.1 + index * 0.06, [index])
   const tiltRaf = useRef(0)
+  const coverSrc = String(project.coverSrc || '').trim()
+  const coverAlt = String(project.coverAlt || project.title || '').trim() || project.title
+  const coverLabel = project.year ? String(project.year) : project.title
 
   useEffect(() => () => {
     if (tiltRaf.current) cancelAnimationFrame(tiltRaf.current)
@@ -65,14 +68,26 @@ export default function ProjectCard({ project, index = 0 }) {
         onMouseMove={onTiltMove}
         onMouseLeave={onTiltLeave}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-accent-500/20 via-white/50 to-transparent" />
+        {coverSrc ? (
+          <img
+            src={coverSrc}
+            alt={coverAlt}
+            loading="lazy"
+            decoding="async"
+            sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : null}
+        <div
+          className={`absolute inset-0 bg-gradient-to-br from-accent-500/20 via-white/50 to-transparent ${coverSrc ? 'opacity-55' : ''}`}
+        />
         <div className="absolute inset-0">
           <div className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-accent-500/15 blur-2xl" />
           <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-obsidian-950/10 blur-2xl" />
         </div>
         <div className="absolute left-5 bottom-5 right-5 flex items-center justify-between gap-3">
-          <div className="text-xs font-semibold text-obsidian-950/75">Thumbnail</div>
-          <div className="h-7 w-7 rounded-xl border border-obsidian-950/15 bg-white/60" />
+          <div className="text-xs font-semibold text-obsidian-950/75 line-clamp-1">{coverLabel}</div>
+          <div className="h-7 w-7 shrink-0 rounded-xl border border-obsidian-950/15 bg-white/60" />
         </div>
       </motion.div>
 

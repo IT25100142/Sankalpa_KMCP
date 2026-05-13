@@ -39,6 +39,11 @@ export default function Navbar() {
   const firstLinkRef = useRef(null)
   const menuPanelId = useId()
 
+  const closeMobileMenu = useCallback(() => {
+    setMenuOpen(false)
+    menuButtonRef.current?.focus()
+  }, [])
+
   const measureHeader = useCallback(() => {
     const el = shellRef.current
     if (!el) return
@@ -95,13 +100,19 @@ export default function Navbar() {
   useEffect(() => {
     if (!menuOpen) return
     const onKey = (e) => {
-      if (e.key === 'Escape') {
-        setMenuOpen(false)
-        menuButtonRef.current?.focus()
-      }
+      if (e.key === 'Escape') closeMobileMenu()
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
+  }, [menuOpen, closeMobileMenu])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const prevOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prevOverflow
+    }
   }, [menuOpen])
 
   const hideOffset = Math.max(headerHeight + 8, 88)
@@ -118,10 +129,18 @@ export default function Navbar() {
         transition: reduce ? 'none' : `transform 520ms cubic-bezier(${easeSmooth.join(',')})`,
       }}
     >
+      {menuOpen ? (
+        <div
+          role="presentation"
+          className="fixed inset-0 z-40 bg-obsidian-950/25 backdrop-blur-[2px] md:hidden"
+          onClick={closeMobileMenu}
+          aria-hidden
+        />
+      ) : null}
       <div
         ref={shellRef}
         className={cx(
-          'border-b',
+          'relative z-50 border-b',
           solid || menuOpen
             ? 'border-obsidian-950/10 bg-white/80 backdrop-blur-md'
             : 'border-transparent',
